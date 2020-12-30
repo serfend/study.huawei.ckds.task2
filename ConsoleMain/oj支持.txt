@@ -1,0 +1,12 @@
+不支持auto
+不支持abs,min,pow
+不支持random
+不支持to_string
+不支持scanf，支持cin
+
+支持未初始化的变量
+支持自初始化属性
+支持声明但未使用
+支持模板函数
+支持创建指针数组
+支持cstring->memset
