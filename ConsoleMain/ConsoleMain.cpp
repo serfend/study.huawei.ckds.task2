@@ -82,6 +82,9 @@ public:
         double d = user_func_abs((double)this->x - (double)x) + user_func_abs((double)this->y - (double)y);
         return d * d;
     }
+    Pos* clone() {
+        return new Pos(this->x, this->y);
+    }
 #if DEBUG
     std::string to_string()
     {
@@ -160,6 +163,9 @@ public:
     }
     void move(int move, Solution *glo);
     void judge(int move, Solution *glo);
+    Postman* clone() {
+        return new Postman(this->pos->clone(), this->value, this->max_value);
+    }
 #if DEBUG
     std::string to_string()
     {
@@ -173,6 +179,9 @@ class Repository : public Source
 public:
     Repository(Pos *pos, int value) : Source::Source(pos, value){};
     effectionest *caculate_rate(Solution *glo);
+    Repository* clone() {
+        return new Repository(this->pos->clone(), this->value);
+    }
 };
 
 class Solution
@@ -193,7 +202,25 @@ public:
     std::vector<int> step_group;
     int now_step;
     int step_group_len() { return this->step_group.size(); };
-
+    
+    int assess_to_finnal_step(std::vector<Repository*>repository,Postman* postman,std::vector<Pos*> path){
+        // deep copy
+        std::vector<Repository*> rep;
+        Postman* p = postman->clone();
+        int min_step = 1e5;
+        std::vector<Pos*> path;
+        do {
+            Repository* r = (*repository.end())->clone();
+            rep.push_back(r);
+            repository.pop_back();
+        } while (!repository.empty());
+        // iterate
+        for (int i = 0; i < rep.size(); i++) {
+            Repository* current = rep[i];
+            if (current->value > 0 && p->value == p->max_value)continue;
+            int current_step = assess_to_finnal_step(rep, p, path);
+        }
+    }
     Solution()
     {
         this->map_size = 12;
