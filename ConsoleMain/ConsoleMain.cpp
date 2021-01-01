@@ -208,7 +208,7 @@ public:
         std::vector<Repository*> rep;
         Postman* p = postman->clone();
         int min_step = 1e5;
-        std::vector<Pos*> path;
+        std::vector<Pos*> min_path;
         do {
             Repository* r = (*repository.end())->clone();
             rep.push_back(r);
@@ -219,7 +219,12 @@ public:
             Repository* current = rep[i];
             if (current->value > 0 && p->value == p->max_value)continue;
             int current_step = assess_to_finnal_step(rep, p, path);
+            if (current_step < min_step) {
+                min_step = current_step;
+                min_path = path;
+            }
         }
+        return min_step;
     }
     Solution()
     {
